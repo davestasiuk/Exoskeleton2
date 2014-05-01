@@ -65,7 +65,7 @@ namespace Exoskeleton
             List<int> StrutNodes = new List<int>();
             List<double> StrutRadii = new List<double>();
 
-            double tol = RhinoDoc.ActiveDoc.ModelAngleToleranceRadians;
+            double tol = RhinoDoc.ActiveDoc.ModelAbsoluteTolerance;
 
             //set the index counter for matching start and end radii from input list
             int IdxL = 0; 
@@ -73,6 +73,12 @@ namespace Exoskeleton
             //register unique nodes and struts, with reference lookups
             //each full strut is broken into two half-struts, with the even-indexed
             //element being the start point, and the odd-indexed element being the end point
+
+            //initialise first node
+            Nodes.Add(L[0].PointAtStart);
+            NodeStruts.Add(new List<int>());
+
+            Rhino.Collections.Point3dList NodeLookup = new Rhino.Collections.Point3dList(Nodes);
 
             foreach (Curve StartL in L)
             {
@@ -85,33 +91,36 @@ namespace Exoskeleton
                 else StrutEndRadius = Re.Last();
 
                 Point3d StrutCenter = new Point3d((StartL.PointAtStart + StartL.PointAtEnd) / 2);
-                
-                if (Nodes.Contains(StartL.PointAtStart))
+
+                int StartTestIdx = NodeLookup.ClosestIndex(StartL.PointAtStart);
+                if (Nodes[StartTestIdx].DistanceTo(StartL.PointAtStart) < tol)
                 {
-                    int NodeIdx = Nodes.IndexOf(StartL.PointAtStart);
-                    NodeStruts[NodeIdx].Add(Struts.Count);
-                    StrutNodes.Add(NodeIdx);
+                    NodeStruts[StartTestIdx].Add(Struts.Count);
+                    StrutNodes.Add(StartTestIdx);
                 }
                 else
                 {
                     StrutNodes.Add(Nodes.Count);
                     Nodes.Add(StartL.PointAtStart);
+                    NodeLookup.Add(StartL.PointAtStart);
                     NodeStruts.Add(new List<int>());
                     NodeStruts.Last().Add(Struts.Count());
                 }
                 Struts.Add(new LineCurve(StartL.PointAtStart, StrutCenter));
                 StrutRadii.Add(StrutStartRadius);
 
-                if (Nodes.Contains(StartL.PointAtEnd))
+
+                int EndTestIdx = NodeLookup.ClosestIndex(StartL.PointAtEnd);
+                if (Nodes[EndTestIdx].DistanceTo(StartL.PointAtEnd) < tol)
                 {
-                    int NodeIdx = Nodes.IndexOf(StartL.PointAtEnd);
-                    NodeStruts[NodeIdx].Add(Struts.Count);
-                    StrutNodes.Add(NodeIdx);
+                    NodeStruts[EndTestIdx].Add(Struts.Count);
+                    StrutNodes.Add(EndTestIdx);
                 }
                 else
                 {
                     StrutNodes.Add(Nodes.Count);
                     Nodes.Add(StartL.PointAtEnd);
+                    NodeLookup.Add(StartL.PointAtEnd);
                     NodeStruts.Add(new List<int>());
                     NodeStruts.Last().Add(Struts.Count);
                 }
