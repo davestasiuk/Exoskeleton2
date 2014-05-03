@@ -32,11 +32,23 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="GH_IO">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Common Files\McNeel\Rhinoceros\5.0\Plug-ins\Grasshopper (b45a29b1-4343-4035-989e-044e8580d9cf)\0.9.72.0\GH_IO.dll</HintPath>
+      <HintPath>..\..\..\..\..\Desktop\Grasshopper\GH_IO.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Grasshopper">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Common Files\McNeel\Rhinoceros\5.0\Plug-ins\Grasshopper (b45a29b1-4343-4035-989e-044e8580d9cf)\0.9.72.0\Grasshopper.dll</HintPath>
+      <HintPath>..\..\..\..\..\Desktop\Grasshopper\Grasshopper.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Plankton">
+      <HintPath>..\..\..\..\..\AppData\Roaming\Grasshopper\Libraries\Plankton.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Plankton">
+      <HintPath>..\..\..\..\..\AppData\Roaming\Grasshopper\Libraries\Plankton.gha</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="PlanktonGh">
+      <HintPath>..\..\..\..\..\AppData\Roaming\Grasshopper\Libraries\PlanktonGh.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="RhinoCommon">
@@ -45,6 +57,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -52,9 +65,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cytoskeleton.cs" />
     <Compile Include="ExoWireframe.cs" />
     <Compile Include="ExoTools.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cyto.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\exoskel.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
