@@ -17,7 +17,7 @@ namespace Cytoskeleton
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddParameter(new PlanktonGh.GH_PlanktonMeshParam(), "PlanktonMesh", "PMesh", "The input PlanktonMesh to thicken the edges of", GH_ParamAccess.item);           
-            pManager.AddNumberParameter("Radius", "R", "Strut thickness", GH_ParamAccess.item, 0.5);
+            pManager.AddNumberParameter("Radius", "R", "Strut thickness. Either as a single value to be applied across the whole mesh, or a list of values per vertex", GH_ParamAccess.list, 0.5);
             pManager.AddBooleanParameter("Dual", "D", "If true, the edges of the dual will be thickened (NOT WORKING YET FOR OPEN MESHES!)", GH_ParamAccess.item, false);
         }
 
@@ -30,11 +30,11 @@ namespace Cytoskeleton
         {
             PlanktonMesh P1 = null;
             if (!DA.GetData(0, ref P1)) return;
-            double R = 0;
-            if (!DA.GetData(1, ref R)) { return; }
+            List<double> RL = new List<double>() ;
+            if (!DA.GetDataList(1, RL)) { return; }
             bool D = false;
-            if (!DA.GetData(2, ref D)) { return; }
-            
+            if (!DA.GetData(2, ref D)) { return; }            
+
             if (D)
             {
                 P1 = P1.Dual();
@@ -52,6 +52,12 @@ namespace Cytoskeleton
                 Vector3d Normal = new Vector3d();
                 double AvgAngle = 0;
 
+                double R = 0;
+                if (RL.Count == 1)
+                { R = RL[0]; }
+                else
+                { R = RL[i]; }
+           
                 int[] OutEdges = P1.Vertices.GetHalfedges(i);
                 int[] Neighbours = P1.Vertices.GetVertexNeighbours(i);
                 Vector3d[] OutVectors = new Vector3d[Neighbours.Length];
@@ -93,6 +99,13 @@ namespace Cytoskeleton
                 int PrevV = P1.Halfedges[Prev].StartVertex;
                 int NextV = P1.Halfedges[Next].StartVertex;
                 int ThisV = P1.Halfedges[i].StartVertex;
+
+                double R = 0;
+                if (RL.Count == 1)
+                { R = RL[0]; }
+                else
+                { R = RL[ThisV]; }
+
                 Point3d PrevPt = P1.Vertices[PrevV].ToPoint3d();
                 Point3d NextPt = P1.Vertices[NextV].ToPoint3d();
                 Point3d ThisPt = P1.Vertices[ThisV].ToPoint3d();

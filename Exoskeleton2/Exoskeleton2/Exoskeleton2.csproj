@@ -47,6 +47,10 @@
       <HintPath>..\..\..\..\..\AppData\Roaming\Grasshopper\Libraries\Plankton.gha</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="PlanktonGh">
+      <HintPath>..\..\..\..\..\AppData\Roaming\Grasshopper\Libraries\PlanktonGh.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="RhinoCommon">
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Rhinoceros 5.0\System\RhinoCommon.dll</HintPath>
       <Private>False</Private>
