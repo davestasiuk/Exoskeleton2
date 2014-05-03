@@ -17,7 +17,7 @@ namespace Cytoskeleton
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddParameter(new PlanktonGh.GH_PlanktonMeshParam(), "PlanktonMesh", "PMesh", "The input PlanktonMesh to thicken the edges of", GH_ParamAccess.item);           
-            pManager.AddNumberParameter("Radius", "R", "Strut thickness. Either as a single value to be applied across the whole mesh, or a list of values per vertex", GH_ParamAccess.list, 0.5);
+            pManager.AddNumberParameter("Radius", "R", "Strut thickness. Either one value to be applied across the whole mesh, or a list of values per vertex of the Plankton mesh(note - these are not ordered the same as the vertices of the grasshopper mesh!)", GH_ParamAccess.list, 0.2);
             pManager.AddBooleanParameter("Dual", "D", "If true, the edges of the dual will be thickened (NOT WORKING YET FOR OPEN MESHES!)", GH_ParamAccess.item, false);
         }
 
@@ -134,6 +134,14 @@ namespace Cytoskeleton
             Mesh OutputMesh = P2.ToRhinoMesh();
             DA.SetData(0, OutputMesh);
 
+        }
+
+        protected override System.Drawing.Bitmap Icon
+        {
+            get
+            {
+                return Exoskeleton.Properties.Resources.cyto;
+            }
         }
 
         public override Guid ComponentGuid

@@ -376,6 +376,14 @@ namespace Exoskeleton
             
         }
 
+        protected override System.Drawing.Bitmap Icon
+        {
+            get
+            {
+                return Exoskeleton.Properties.Resources.exoskel;
+            }
+        }
+
         public override Guid ComponentGuid
         {
             get { return new Guid("ef9d375d-24e5-41e7-8322-e68b9df27a09"); }
