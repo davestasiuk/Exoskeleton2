@@ -10,7 +10,7 @@ namespace Exoskeleton
 {
     public class ThickenWireframe : GH_Component
     {
-        public ThickenWireframe() : base("ExoWireframe","ExoW","Thicken a wireframe with a mesh","Mesh", "ExoTest") { }
+        public ThickenWireframe() : base("ExoWireframe","ExoW","Thicken a wireframe with a mesh","Mesh", "Mesh Thickening") { }
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
@@ -185,7 +185,8 @@ namespace Exoskeleton
                 //direction for dealing with struts at ends
                 if (StrutIndices.Count == 1)
                 {
-                    PlaneOffsets[StrutIndices[0]] = ND;
+                    PlaneOffsets[StrutIndices[0]] = 0;
+                    //PlaneOffsets[StrutIndices[0]] = ND;
                     if (O) StrutSolo[StrutIndices[0]] = true;
                 }
 
@@ -213,13 +214,12 @@ namespace Exoskeleton
 
                     //add hulling vertices
                     for (int HV = 0; HV < S; HV++) StrutHullVtc[StrutIndices[I1], HV] = StrutPlane.PointAt(Math.Cos((HV / Sides) * Math.PI * 2) * StrutRadius, Math.Sin((HV / Sides) * Math.PI * 2) * StrutRadius);
-                    
 
                     double OffsetMult = PlaneOffsets[StrutIndices[I1]];
                     if (ND > OffsetMult) OffsetMult = ND;
                     if (StrutIndices[I1] % 2 != 0) StrutPlane.Rotate(Math.PI, StrutPlane.YAxis, StrutPlane.Origin);
 
-                    if (StrutSolo[StrutIndices[I1]]) OffsetMult = 0;
+                    if (StrutIndices.Count ==1) OffsetMult = 0;
 
                     StrutPlanes[StrutIndices[I1]] = StrutPlane;
                     StrutPlanes[StrutIndices[I1]].Origin = Strut.PointAtStart + Strut.TangentAtStart * OffsetMult;
@@ -299,7 +299,10 @@ namespace Exoskeleton
                 else if (!O)
                 {
                         Mesh EndMesh = new Mesh();
-                        EndMesh.Vertices.Add(StrutPlanes[StrutIndices[0]].Origin);
+
+                        double KnuckleOffset = ND * 0.5;
+                        EndMesh.Vertices.Add(Nodes[NodeIdx] + (Knuckles[0] * KnuckleOffset));
+
                         for (int HullVtx = 0; HullVtx < S; HullVtx++)
                         {
                             EndMesh.Vertices.Add(StrutHullVtc[StrutIndices[0], HullVtx]);
