@@ -65,15 +65,15 @@ namespace Cytoskeleton
 
                 for (int j = 0; j < Valence; j++)
                 {
-                    OutVectors[j] = P1.Vertices[Neighbours[j]].ToPoint3d() - Vertex;
+                    Vector3d OutVector = P1.Vertices[Neighbours[j]].ToPoint3d() - Vertex;
+                    OutVector.Unitize();
+                    OutVectors[j] = OutVector;
                 }
 
                 for (int j = 0; j < Valence; j++)
                 {
                     if (P1.Halfedges[OutEdges[(j + 1) % Valence]].AdjacentFace != -1)
-                    {
-                        Normal += (Vector3d.CrossProduct(OutVectors[(j + 1) % Valence], OutVectors[j]));
-                    }
+                    {Normal += (Vector3d.CrossProduct(OutVectors[(j + 1) % Valence], OutVectors[j]));}
                 }
 
                 Normal.Unitize();
@@ -115,8 +115,13 @@ namespace Cytoskeleton
                 Arm1.Unitize(); Arm2.Unitize();
                 double alpha = Vector3d.VectorAngle(Arm1, Arm2);
                 Point3d ThisElbow;
-                Vector3d Bisect = Vector3d.CrossProduct(Normals[ThisV], -1.0 * Arm1) +
-                  Vector3d.CrossProduct(Normals[ThisV], Arm2);
+
+                Vector3d Bisect = new Vector3d();
+                if (P1.Halfedges[i].AdjacentFace == -1)
+                {Bisect = Vector3d.CrossProduct(Normals[ThisV], -1.0 * Arm1) + Vector3d.CrossProduct(Normals[ThisV], Arm2);}
+                else
+                {Bisect = Arm1 + Arm2;}
+            
                 Bisect.Unitize();
                 ThisElbow = ThisPt + Bisect * (R / Math.Sin(alpha * 0.5));
                 Elbow.Add(P2.Vertices.Add(ThisElbow));
