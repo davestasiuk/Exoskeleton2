@@ -10,7 +10,7 @@ namespace Exoskeleton
 {
     public class ThickenWireframe : GH_Component
     {
-        public ThickenWireframe() : base("ExoWireframe","ExoW","Thicken a wireframe with a mesh","Mesh", "Mesh Thickening") { }
+        public ThickenWireframe() : base("ExoWireframe","ExoW","Thicken a wireframe with a mesh","Mesh", "Thicken") { }
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {

@@ -12,7 +12,7 @@ namespace Cytoskeleton
 {
     public class Cytoskeleton : GH_Component
     {
-        public Cytoskeleton() : base("Cytoskeleton", "Cyto", "Thicken the edges of a mesh", "Mesh", "ExoTest") { }
+        public Cytoskeleton() : base("Cytoskeleton", "Cyto", "Thicken the edges of a mesh", "Mesh", "Thicken") { }
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
