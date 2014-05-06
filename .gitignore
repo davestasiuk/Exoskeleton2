@@ -50,6 +50,11 @@ build/
 [Bb]in/
 [Oo]bj/
 
+# Referenced Libraries
+[Ll]ib/**/*.dll
+[Ll]ib/**/*.xml
+[Ll]ib/**/*.gha
+
 # MSTest test Results
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*

@@ -1,0 +1,9 @@
+This project is set up to reference the following libraries from inside this directory:
+
+* RhinoCommon.dll
+* Grasshopper.dll
+* GH_IO.dll
+* Plankton.dll
+* Plankton.gha
+
+You can also drop in the corresponding XML documentation files if you want comments to appear alongside the intellisense tooltips.
