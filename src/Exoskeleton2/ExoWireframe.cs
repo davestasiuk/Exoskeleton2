@@ -25,7 +25,7 @@ namespace Exoskeleton
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddMeshParameter("Mesh", "M", "Thickened wireframe", GH_ParamAccess.item);
+            pManager.AddMeshParameter("Mesh", "M", "Thickened wireframe", GH_ParamAccess.list);
         }
 
         protected override void SolveInstance(IGH_DataAccess DA)
@@ -360,6 +360,7 @@ namespace Exoskeleton
 
                     //build up faces
                     ExoTools.StockingStitch(ref StrutMesh, Segments, S);
+                    ExoTools.NormaliseMesh(ref StrutMesh);
                     Hulls.Append(StrutMesh);
                 }
             }
@@ -373,9 +374,13 @@ namespace Exoskeleton
 
             Hulls.Faces.CullDegenerateFaces();
             Hulls.Vertices.CullUnused();
-            ExoTools.NormaliseMesh(ref Hulls);
+
+            Mesh[] OutMeshes = Hulls.SplitDisjointPieces();
+            for (int SplitMesh = 0; SplitMesh < OutMeshes.Length; SplitMesh++) { ExoTools.NormaliseMesh(ref OutMeshes[SplitMesh]); }
+           
+            //ExoTools.NormaliseMesh(ref Hulls);
     
-            DA.SetData(0, Hulls);
+            DA.SetDataList(0, OutMeshes);
             
         }
 
